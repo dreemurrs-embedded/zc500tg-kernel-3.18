@@ -315,13 +315,14 @@ enum dlm_status dlmconvert_remote(struct dlm_ctxt *dlm,
 
 	spin_lock(&res->spinlock);
 	res->state &= ~DLM_LOCK_RES_IN_PROGRESS;
-	lock->convert_pending = 0;
 	/* if it failed, move it back to granted queue */
 	if (status != DLM_NORMAL) {
 		if (status != DLM_NOTQUEUED)
 			dlm_error(status);
 		dlm_revert_pending_convert(res, lock);
 	}
+
+	lock->convert_pending = 0;
 bail:
 	spin_unlock(&res->spinlock);
 
